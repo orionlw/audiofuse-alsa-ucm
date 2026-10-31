@@ -1,0 +1,260 @@
+diff -ruN a/ucm2/USB-Audio/Arturia/Audiofuse.conf b/ucm2/USB-Audio/Arturia/Audiofuse.conf
+--- a/ucm2/USB-Audio/Arturia/Audiofuse.conf	1969-12-31 20:00:00.000000000 -0400
++++ b/ucm2/USB-Audio/Arturia/Audiofuse.conf	2026-10-31 10:15:55.667100257 -0300
+@@ -0,0 +1,10 @@
++Comment "Arturia AudioFuse"
++
++SectionUseCase."HiFi" {
++	Comment "Default Alsa Profile"
++	File "/USB-Audio/Arturia/Audiofuse-HiFi.conf"
++}
++
++Include.dhw.File "/common/directm.conf"
++
++Macro.0.DirectUseCase { Id="Direct" PlaybackChannels=8 CaptureChannels=8 }
+diff -ruN a/ucm2/USB-Audio/Arturia/Audiofuse-HiFi.conf b/ucm2/USB-Audio/Arturia/Audiofuse-HiFi.conf
+--- a/ucm2/USB-Audio/Arturia/Audiofuse-HiFi.conf	1969-12-31 20:00:00.000000000 -0400
++++ b/ucm2/USB-Audio/Arturia/Audiofuse-HiFi.conf	2026-10-31 10:15:55.667157430 -0300
+@@ -0,0 +1,231 @@
++Include.pcm_split.File "/common/pcm/split.conf"
++
++Macro [
++	{
++		SplitPCM {
++			Name "audiofuse_stereo_out"
++			Direction Playback
++			Format S32_LE
++			Channels 2
++			HWChannels 8
++			HWChannelPos0 FL
++			HWChannelPos1 FR
++			HWChannelPos2 FL
++			HWChannelPos3 FR
++			HWChannelPos4 FL
++			HWChannelPos5 FR
++			HWChannelPos6 FL
++			HWChannelPos7 FR
++		}
++	}
++	{
++		SplitPCM {
++			Name "audiofuse_stereo_in"
++			Direction Capture
++			Format S32_LE
++			Channels 2
++			HWChannels 8
++			HWChannelPos0 FL
++			HWChannelPos1 FR
++			HWChannelPos2 FL
++			HWChannelPos3 FR
++			HWChannelPos4 FL
++			HWChannelPos5 FR
++			HWChannelPos6 FL
++			HWChannelPos7 FR
++		}
++	}
++	{
++		SplitPCM {
++			Name "audiofuse_mono_in"
++			Direction Capture
++			Format S32_LE
++			Channels 1
++			HWChannels 8
++			HWChannelPos0 MONO
++			HWChannelPos1 MONO
++			HWChannelPos2 MONO
++			HWChannelPos3 MONO
++			HWChannelPos4 MONO
++			HWChannelPos5 MONO
++			HWChannelPos6 MONO
++			HWChannelPos7 MONO
++		}
++	}
++]
++
++SectionDevice."Line1" {
++	Comment "Output 1/2 (Main / Speakers)"
++
++	Value {
++		PlaybackPriority 400
++	}
++	Macro.pcm_split.SplitPCMDevice {
++		Name "audiofuse_stereo_out"
++		Direction Playback
++		HWChannels 8
++		Channels 2
++		Channel0 0
++		Channel1 1
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line2" {
++	Comment "Output 3/4"
++
++	Value {
++		PlaybackPriority 300
++	}
++	Macro.pcm_split.SplitPCMDevice {
++		Name "audiofuse_stereo_out"
++		Direction Playback
++		HWChannels 8
++		Channels 2
++		Channel0 2
++		Channel1 3
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line3" {
++	Comment "Output 5/6"
++
++	Value {
++		PlaybackPriority 200
++	}
++	Macro.pcm_split.SplitPCMDevice {
++		Name "audiofuse_stereo_out"
++		Direction Playback
++		HWChannels 8
++		Channels 2
++		Channel0 4
++		Channel1 5
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line4" {
++	Comment "Output 7/8"
++
++	Value {
++		PlaybackPriority 100
++	}
++	Macro.pcm_split.SplitPCMDevice {
++		Name "audiofuse_stereo_out"
++		Direction Playback
++		HWChannels 8
++		Channels 2
++		Channel0 6
++		Channel1 7
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Mic1" {
++	Comment "Input 1 (Mic/Inst)"
++
++	Value {
++		CapturePriority 600
++	}
++	Macro.pcm_split2.SplitPCMDevice {
++		Name "audiofuse_mono_in"
++		Direction Capture
++		HWChannels 8
++		Channels 1
++		Channel0 0
++		ChannelPos0 MONO
++	}
++}
++
++SectionDevice."Mic2" {
++	Comment "Input 2 (Mic/Inst)"
++
++	Value {
++		CapturePriority 500
++	}
++	Macro.pcm_split2.SplitPCMDevice {
++		Name "audiofuse_mono_in"
++		Direction Capture
++		HWChannels 8
++		Channels 1
++		Channel0 1
++		ChannelPos0 MONO
++	}
++}
++
++SectionDevice."Line5" {
++	Comment "Input 1/2 Stereo"
++
++	Value {
++		CapturePriority 400
++	}
++	Macro.pcm_split1.SplitPCMDevice {
++		Name "audiofuse_stereo_in"
++		Direction Capture
++		HWChannels 8
++		Channels 2
++		Channel0 0
++		Channel1 1
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line6" {
++	Comment "Input 3/4 Stereo (Line/Phono)"
++
++	Value {
++		CapturePriority 300
++	}
++	Macro.pcm_split1.SplitPCMDevice {
++		Name "audiofuse_stereo_in"
++		Direction Capture
++		HWChannels 8
++		Channels 2
++		Channel0 2
++		Channel1 3
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line7" {
++	Comment "Input 5/6 Stereo"
++
++	Value {
++		CapturePriority 200
++	}
++	Macro.pcm_split1.SplitPCMDevice {
++		Name "audiofuse_stereo_in"
++		Direction Capture
++		HWChannels 8
++		Channels 2
++		Channel0 4
++		Channel1 5
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
++
++SectionDevice."Line8" {
++	Comment "Input 7/8 Stereo"
++
++	Value {
++		CapturePriority 100
++	}
++	Macro.pcm_split1.SplitPCMDevice {
++		Name "audiofuse_stereo_in"
++		Direction Capture
++		HWChannels 8
++		Channels 2
++		Channel0 6
++		Channel1 7
++		ChannelPos0 FL
++		ChannelPos1 FR
++	}
++}
+diff -ruN a/ucm2/USB-Audio/USB-Audio.conf b/ucm2/USB-Audio/USB-Audio.conf
+--- a/ucm2/USB-Audio/USB-Audio.conf	2026-10-31 10:15:55.661861858 -0300
++++ b/ucm2/USB-Audio/USB-Audio.conf	2026-10-31 10:15:55.665236187 -0300
+@@ -251,6 +251,7 @@
+ Macro.kontrolz1.StringMatch		"Id='17cc:1210' Profile='NativeInstruments/Traktor-Kontrol-Z1'"
+ Macro.minifuse4.StringMatch		"Id='1c75:af70' Profile='Arturia/Minifuse-4'"
+ Macro.minifuse12.RegexMatch		"Id='1c75:af[89]0' Profile='Arturia/Minifuse-12'"
++Macro.audiofuse.StringMatch		"Id='1c75:af02' Profile='Arturia/Audiofuse'"
+ Macro.revelator.StringMatch		"Id='194f:0424' Profile='Presonus/Revelator-IO-44'"
+ Macro.zedi10.StringMatch		"Id='22f0:0016' Profile='AllenAndHeath/Zedi10'"
+ Macro.evo4-0006.StringMatch		"Id='2708:0006' Profile='Audient/Audient-EVO4-0006'"
