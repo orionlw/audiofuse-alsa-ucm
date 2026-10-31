@@ -31,7 +31,7 @@ With it, you get separate stereo and mono devices.
 Tested on Fedora 44 with `alsa-ucm` 1.2.16.
 
 ```sh
-git clone https://github.com/<you>/audiofuse-alsa-ucm.git
+git clone https://github.com/orionlw/audiofuse-alsa-ucm.git
 cd audiofuse-alsa-ucm
 sudo ./install.sh
 systemctl --user restart wireplumber pipewire pipewire-pulse
